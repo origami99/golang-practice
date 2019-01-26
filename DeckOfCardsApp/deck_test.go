@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestNewDeck(t *testing.T) {
 	d := newDeck()
@@ -22,4 +25,19 @@ func TestNewDeck(t *testing.T) {
 	if lastCardExpected != lastCardActual {
 		t.Errorf("Expected first card of %v but got %v", lastCardExpected, lastCardActual)
 	}
+}
+
+func TestSaveToDeckAndNewDeckFromFile(t *testing.T) {
+	os.Remove("_decktesting")
+
+	deck := newDeck()
+	deck.saveToFile("_decktesting")
+
+	loadedDeck := newDeckFromFile("_decktesting")
+
+	if len(loadedDeck) != 52 {
+		t.Errorf("Expected 52 cards in deck, got %v", len(loadedDeck))
+	}
+
+	os.Remove("_decktesting")
 }
